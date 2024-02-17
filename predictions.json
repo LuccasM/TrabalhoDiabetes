@@ -1,1 +1,1 @@
-[]
+[{"Pregnancies": 6.0, "Glucose": 148.0, "BloodPressure": 72.0, "SkinThickness": 35.0, "Insulin": 0.0, "BMI": 33.6, "DiabetesPedigreeFunction": 0.327, "Age": 50.0, "CorrectPrediction": true, "diabetes": 1}, {"Pregnancies": 1.0, "Glucose": 85.0, "BloodPressure": 66.0, "SkinThickness": 29.0, "Insulin": 0.0, "BMI": 26.6, "DiabetesPedigreeFunction": 0.351, "Age": 31.0, "CorrectPrediction": true, "diabetes": 0}]

@@ -2,6 +2,12 @@ import pandas as pd
 import numpy as np
 import json
 
+# realiza a carga dos dados do arquivo CSV da diabetes para um dataframe pandas
+def load_data():
+    # faz a leitura do conjunto de dados
+    dados = pd.read_csv('./dados/diabetes.csv')
+    return dados
+
 # retorna todos os dados já armazenados das predições realizadas e validadas pelo usuário
 # TODO: verificar se o arquivo existe antes de abrir
 def get_all_predictions():

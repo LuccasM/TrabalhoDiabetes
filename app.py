@@ -1,17 +1,42 @@
-# importing Important Liberaries
+# Importa as bibliotecas
 import pickle
 import streamlit as st
 import numpy as np
 import pandas as pd
 import data_handler
+import matplotlib.pyplot as plt
 
-# Load model
+# primeiro de tudo, carrega os dados da diabete para um dataframe
+dados = data_handler.load_data()
+
+# Carrega o modelo
 model_diabetes = pickle.load(open('modelo/modelo_diabetes.pkl', 'rb'))
 
-# Web Title
+# Tpitulo
 st.title('Predição de diabetes')
 
-# Split Columns
+data_analyses_on = st.toggle('Exibir análise dos dados')
+
+if data_analyses_on:
+    # essa parte é só um exmplo de que é possível realizar diversas visualizações e plotagens com o streamlit
+    st.header('Dados da diabete - Dataframe')
+    
+    # exibe todo o dataframe dos dados do titanic
+    st.dataframe(dados)
+
+    # plota um histograma das idades dos passageiros
+    st.header('Histograma das idades')
+    fig = plt.figure()
+    plt.hist(dados['Age'], bins=10)
+    plt.xlabel('Idade')
+    plt.ylabel('Quantidade')
+    st.pyplot(fig)
+
+    # plota um gráfico de barras com a contagem dos sobreviventes
+    st.header('Diabéticos')
+    st.bar_chart(dados.Outcome.value_counts())
+
+# Define a primeira linha dos inputs
 col1, col2, col3 = st.columns(3)
 
 with col1 :
@@ -23,7 +48,7 @@ with col2 :
 with col3 :
   Pressao = st.number_input('Informe a pressão sanguínea')
 
-# define a linha 2 de inputs, também com 3 colunas
+# Define a segunda linha dos inputs
 col1, col2, col3 = st.columns(3)
 
 with col1 :
@@ -35,7 +60,7 @@ with col2 :
 with col3 :
   IMC = st.number_input('Informe o IMC')
 
-# define a linha 2 de inputs, também com 3 colunas
+# Define a terceira linha dos inputs
 col1, col2, col3 = st.columns(3)
 
 with col1 :
@@ -47,9 +72,8 @@ with col2 :
 with col3 : 
   submit = st.button('Predição')  
   
-# Prediction
-#diabetes_diagnostico = ''
 
+# Se clicou no botão de predição
 if submit or 'diabetes' in st.session_state:
   
   paciente = {
@@ -67,27 +91,28 @@ if submit or 'diabetes' in st.session_state:
   values = pd.DataFrame([paciente])
   print(values) 
 
-  # realiza a predição de sobrevivência do passageiro com base nos dados inseridos pelo usuário
+  # realiza a predição para saber se o paciente tem ou não diabetes com base nos parâmetros informados
   results = model_diabetes.predict(values)
   print(results)
 
   # o modelo foi treinado para retornar uma lista com 0 ou 1, onde cada posição da lista indica se o passageiro sobreviveu (1) ou não (0)
   # como estamos realizando a predição de somente um passageiro por vez, o modelo deverá retornar somente um elemento na lista
   if len(results) == 1:
+      
       # converte o valor retornado para inteiro
       diabetes = int(results[0])
       
-      # verifica se o passageiro sobreviveu
+      # verifica se o paciente tem diabetes
       if diabetes == 1:
-          # se sim, exibe uma mensagem que o passageiro sobreviveu
+          # se sim, exibe uma mensagem que o paciente tem diabetes
+          st.subheader('O paciente tem diabetes! 😢')
+          if 'diabetes' not in st.session_state:
+              st.snow()          
+      else:
+          # se não, exibe uma mensagem que o paciente não tem diabetes
           st.subheader('O paciente não tem diabetes 😃🙌🏻')
           if 'diabetes' not in st.session_state:
               st.balloons()
-      else:
-          # se não, exibe uma mensagem que o passageiro não sobreviveu
-          st.subheader('O paciente tem diabetes! 😢')
-          if 'diabetes' not in st.session_state:
-              st.snow()
       
       # salva no cache da aplicação se o passageiro sobreviveu
       st.session_state['diabetes'] = diabetes
