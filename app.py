@@ -5,6 +5,17 @@ import numpy as np
 import pandas as pd
 import data_handler
 import matplotlib.pyplot as plt
+import util
+
+print("Abriu a página")
+
+# verifica se a senha de acesso está correta
+if not util.check_password():
+    # se a senha estiver errada, para o processamento do app
+    print("Usuario não logado")
+    st.stop()
+
+print("Carregou a página")    
 
 # primeiro de tudo, carrega os dados da diabete para um dataframe
 dados = data_handler.load_data()
